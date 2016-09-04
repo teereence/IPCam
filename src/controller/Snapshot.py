@@ -1,23 +1,27 @@
-import urllib3
+from PIL import Image, ImageDraw, ImageFont
+import io
+import os
+import datetime
 
-class Snapshot() :
-    def __init__(self, config, storage, verbose = False, start=0) :
+
+class Snapshot():
+    def __init__(self, config, storage, verbose=False, start=0):
         self.snapshot = None
         self.verbose = verbose
         self.config = config
         self.storage = storage
         self.iteration = start
 
-    def get(self, date=True) :
-        baseUrl = self.config.baseUrl
+    def get(self, date=True):
+        base_url = self.config.baseUrl
         values = self.config.userSettings
-        data = '&'.join(( k + '='+ values.get(k) for k in values.keys()))
-        req = baseUrl+ '?' + data
-        response = urllib3. .urlopen(req)
+        data = '&'.join((k + '=' + values.get(k) for k in values.keys()))
+        req = base_url + '?' + data
+        response = urllib2.urlopen(req)
         snap = response.read()
         if date:
             snap = self.add_overlay(snap)
-        self.iteration = self.iteration + 1
+        self.iteration += 1L
         self.snapshot = snap
         return snap
 
@@ -36,16 +40,13 @@ class Snapshot() :
 
     def export(self):
         directory = self.storage.directory()
-        fileName = str(self.iteration) + storage.extension
+        fileName = str(self.iteration) + self.extension
         fullPath = os.path.join(directory, fileName)
         writer = open(fullPath, 'w')
-        self.iteration = self.iteration + 1
+        self.iteration +=
         snap = self.get()
         writer.write(snap)
         writer.close()
 
         if self.verbose:
-            print
-            'wrote snap in ' + fullPath
-
-
+            print ('wrote snap in ' + fullPath
